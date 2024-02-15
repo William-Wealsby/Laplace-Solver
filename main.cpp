@@ -41,13 +41,11 @@ int main(int argc, char** argv){
 		//	allows initalise strings for input and output file	
 	std::string input = "";
 	std::string output = "output/output.json";
-	std::string err_output = "output/err_output.json";
 
 	// reads inputs piped in via bash script, if number isn't the amount expected then it ignores them.
-	if (argc==4){
+	if (argc==3){
 			input = argv[1];
 			output = argv[2];
-			err_output = argv[3];
 	}
 
 	int LX=10;
@@ -86,8 +84,23 @@ int main(int argc, char** argv){
 	}
 
 	//store in json format in output file
+	std::ofstream outputfile(output);
+	outputfile << '[\n';
+	for (int j=0;j<LY;j++){
+		
+		outputfile << '[';
+		for (int i=0;i<LX;i++){
+			outputfile << vals[j][i];
+		}
+		if(i!=LX-1){
+			outputfile << ',';
+		}
+		if (j==LX-1){outputfile << ']\n';}
+		else {outputfile << '],\n';}
 
-
+	}
+	outputfile << ']';
+	outputfile.close();
 
 
 
