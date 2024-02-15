@@ -3,14 +3,14 @@
 #include<cmath>
 
 //function to initalise values
-void initialise(double** vals, double** delta_vals, int LX, int LY, std::string BC){
+void initialise(double** vals, double** delta_vals, int LX, int LY, int BC){
 	for (int i=0;i<LX;i++){
 		for (int j=0;j<LY;j++){
 			delta_vals[i][j]=0;			
 		}
 	}
 	switch(BC){
-		case "hyperbolic":
+		case 1: // hyperbolic
 				//Code
 				break;
 
@@ -34,7 +34,6 @@ void update_vals(double** vals, double** delta_vals, int x, int y){
 	vals[x][y]+=vals[x][y];
 }
 
-
 int main(int argc, char** argv){
 
 		
@@ -47,10 +46,21 @@ int main(int argc, char** argv){
 			input = argv[1];
 			output = argv[2];
 	}
-
+	
+	int itrs=50;
 	int LX=10;
 	int LY=10;
-	std::string BC = "";
+	int BC=0;
+
+	//find values from input file if it exists
+	if (input!=""){
+		std::ifstream inputfile(input);
+		inputfile >> itrs;
+		inputfile >> LX;
+		inputfile >> LY;
+		inputfile >> BC;
+		inputfile.close();
+	}
 	
 
 	// create memory for arrays - vals & delta_vals
@@ -64,11 +74,11 @@ int main(int argc, char** argv){
 	}
 
 	//initalise memory for 
-	intialise(vals,delta_vals,LX,LY,BC);
+	initialise(vals,delta_vals,LX,LY,BC);
 
 
 	//loop for N iterations and loop over val apart from fixed values (edges)
-	for (int k=0;k<N;k++){
+	for (int k=0;k<itrs;k++){
 
 		for (int j=1;j<LY-1;j++){
 			for (int i=1;i<LX-1;i++){
@@ -85,28 +95,26 @@ int main(int argc, char** argv){
 
 	//store in json format in output file
 	std::ofstream outputfile(output);
-	outputfile << '[\n';
+	outputfile << "[\n";
 	for (int j=0;j<LY;j++){
 		
 		outputfile << '[';
 		for (int i=0;i<LX;i++){
 			outputfile << vals[j][i];
+			if(i!=LX-1){
+				outputfile << ',';
+			}
 		}
-		if(i!=LX-1){
-			outputfile << ',';
-		}
-		if (j==LX-1){outputfile << ']\n';}
-		else {outputfile << '],\n';}
+		if (j==LX-1){outputfile << "]\n";}
+		else {outputfile << "],\n";}
 
 	}
 	outputfile << ']';
 	outputfile.close();
 
 
-
-
 	//cleanup memory used
-	for (int;i=0;i<LY;i++){
+	for (int i=0;i<LY;i++){
 		delete[] vals[i];	
 	}
 	delete[] vals;
@@ -115,5 +123,7 @@ int main(int argc, char** argv){
 		delete[] delta_vals[i];
 	}
 	delete[] delta_vals;
+
+	std::cout << "Completed";
 
 }
