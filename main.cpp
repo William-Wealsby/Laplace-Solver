@@ -4,6 +4,8 @@
 
 //function to initalise values
 void initialise(double** vals, double** delta_vals, int LX, int LY, int BC){
+	const double pi = 3.14159265358979323846;
+
 	for (int i=0;i<LX;i++){
 		for (int j=0;j<LY;j++){
 			delta_vals[i][j]=0;			
@@ -11,16 +13,29 @@ void initialise(double** vals, double** delta_vals, int LX, int LY, int BC){
 	}
 	switch(BC){
 		case 1: // hyperbolic
-				//Code
-				break;
+			
+			for (int j=0;j<LY;j++){
+				vals[0][j] = std::cosh(0)*std::sin(pi*j/(LY-1));
+				vals[LX-1][j] = std::cosh(pi)*std::sin(pi*j/(LY-1));
+			}
+
+			for (int i=1;i<LX-1;i++){
+				vals[i][0] = std::cosh(pi*i/(LX-1))*std::sin(0);
+				vals[i][LY-1] = std::cosh(pi*i/(LX-1))*std::sin(pi);
+				
+			}
+
+
+			break;
 
 		default:
 
-				for(int i=0;i<LX;i++){
-						for(int j=0;j<LY;j++){
-								vals[i][j] = 0;
-						}
+
+			for(int i=0;i<LX;i++){
+				for(int j=0;j<LY;j++){
+						vals[i][j] = 0;
 				}
+			}
 	}
 }
 
@@ -31,11 +46,10 @@ void calc_delta(double** vals, double** delta_vals, int x, int y){
 
 //updates vals to to next iteration
 void update_vals(double** vals, double** delta_vals, int x, int y){
-	vals[x][y]+=vals[x][y];
+	vals[x][y]+=delta_vals[x][y];
 }
 
 int main(int argc, char** argv){
-
 		
 		//	allows initalise strings for input and output file	
 	std::string input = "";
@@ -47,10 +61,10 @@ int main(int argc, char** argv){
 			output = argv[2];
 	}
 	
-	int itrs=50;
+	int itrs=0;
 	int LX=10;
 	int LY=10;
-	int BC=0;
+	int BC=1;
 
 	//find values from input file if it exists
 	if (input!=""){

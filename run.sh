@@ -3,33 +3,30 @@
 echo "enter run name:"
 read name
 
-for Lx in 50 ;do
-for Ly in 50 ;do
+#for ... in 10 20 30 ;do
+width=50
+length=50
 itrs=100
-bc=hyperbolic
+bc=1
 
 filepath="output/$name$n"
 fileout="${filepath}/output.json"
 filein="${filepath}/input.txt"
-fileerr="${filepath}/err_output.json"
 
-echo $name$n
 sleep 1&
 echo "Making Directory and Output Folder"
 mkdir $filepath
 cp template.txt $filein
 touch $fileout
 wait
-sed -i "s/NAME/${name}/g" $filein
-sed -i "s/WIDTH/${width}/g" $filein 
-sed -i "s/LENGTH/${length}/q" $filein
-sed -i "s/BC/${bc}/q" $filein
-sed -i "s/ITRS/${itrs}/q" $filein
+sed -i "s/ITRS/${itrs}/g" $filein
+sed -i "s/WIDTH/${width}/g" $filein
+sed -i "s/LENGTH/${length}/g" $filein
+sed -i "s/BC/${bc}/g" $filein
 
 
-./run.out $filein $fileout $fileerr
+./run.out $filein $fileout
 echo -e $fileout | python3 graphing.py
 
-done
-done
+#done
 
