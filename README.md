@@ -1,3 +1,3 @@
 Simple Laplace Equation Solver
 
-Before using add your required boundary conditions to main.cpp
+Before using, add your required boundary conditions to main.cpp
