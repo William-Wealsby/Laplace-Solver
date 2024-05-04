@@ -8,5 +8,6 @@ Before using, add your required boundary conditions to main.cpp
 | Heat Equation         | 
 |Gravitational Potential|
 
-To use build using g++: ``` g++ -o run.out main.cpp ```
+To use, build using g++: ``` g++ -o run.out main.cpp ```
+
 Then update run.sh to contain any new boundary conditions desired and finally run the bash script in the terminal
